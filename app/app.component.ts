@@ -1,20 +1,29 @@
 import { Component } from "@angular/core";
+import { NativeScriptFormsModule  } from "nativescript-angular/forms";
+import * as LabelModule from "tns-core-modules/ui/label";
+import { EventData } from "data/observable";
+import { Label } from "ui/label";
+var http = require("http");
 
 @Component({
-  selector: "my-app",
-  template: `
-    <ActionBar title="Testin app"></ActionBar>
-    <StackLayout orientation="vertical">
-        <Image src="https://img.abiosgaming.com/competitors/geek-fam-team-logo.png" stretch="none" horizontalAlignment="center"></Image>
-        <TextField hint="Email" keyboardType="email" autocorrect="false" autocapitalizationType="none"></TextField>
-        <TextField hint="Password" secure="true"></TextField>
-
-        <Button text="Entrar"></Button>
-        <Button text="Registrarse"></Button>
-
-    </StackLayout>
-  `
+    selector: "my-app",
+    template: `
+        <StackLayout orientation="vertical">
+            <TextField id="username" [(ngModel)]="username"></TextField>
+            <Button text="Llamar a la api de github" (tap)="submit()"></Button>
+        </StackLayout>`
 })
 export class AppComponent {
-  // Your TypeScript logic goes here
+
+    username :string = "";
+    name: string;
+    location: string;
+    submit(): void {
+
+        http.getJSON("https://api.github.com/users/" + this.username).then(function (data) {
+            alert(data.name + ' ' + data.location)
+        }, function (error) {
+            alert("ocurrio un error al consultar la api");
+        });
+    }
 }
